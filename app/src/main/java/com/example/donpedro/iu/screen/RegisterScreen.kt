@@ -39,10 +39,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import com.example.donpedro.viewmodel.RegisterViewModel
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(navController: NavController) {
+fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel) {
     val bgGradient = Brush.verticalGradient(
         colors = listOf(TertiaryCream, Color.White),
         tileMode = TileMode.Clamp
@@ -75,13 +77,13 @@ fun RegisterScreen(navController: NavController) {
                 )
             }
         ) { innerPadding ->
-            SecondBodyContent(navController, modifier = Modifier.padding(innerPadding))
+            SecondBodyContent(navController, viewModel, modifier = Modifier.padding(innerPadding))
         }
     }
 }
 
 @Composable
-fun SecondBodyContent(navController: NavController, modifier: Modifier = Modifier) {
+fun SecondBodyContent(navController: NavController,viewModel: RegisterViewModel, modifier: Modifier = Modifier) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -190,7 +192,9 @@ fun SecondBodyContent(navController: NavController, modifier: Modifier = Modifie
             val buttonShape = RoundedCornerShape(32.dp)
 
             Button(
-                onClick = { /* TODO handle sign up */ },
+                onClick = {
+                    viewModel.register(name,email,password)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
@@ -201,6 +205,13 @@ fun SecondBodyContent(navController: NavController, modifier: Modifier = Modifie
                 )
             ) {
                 Text("Registrate", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold))
+            }
+            if (viewModel.registerResult != null) {
+                Text(
+                    text = viewModel.registerResult ?: "",
+                    color = PrimaryRed,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))

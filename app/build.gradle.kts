@@ -42,7 +42,7 @@ android {
 
 dependencies {
     val nav_version = "2.9.2"
-
+    val retrofit_version = "2.9.0"
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation(libs.androidx.core.ktx)
@@ -54,7 +54,9 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-
+    // retrofit
+    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
