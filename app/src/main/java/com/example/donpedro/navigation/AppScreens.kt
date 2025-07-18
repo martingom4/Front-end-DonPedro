@@ -1,0 +1,8 @@
+package com.example.donpedro.navigation
+
+sealed class AppScreens (val route: String){
+    object OnboardingScreen: AppScreens("onboarding_screen")
+    object RegisterScreen: AppScreens("register_screen")
+    object LoginScreen: AppScreens("login_screen")
+
+}
