@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.donpedro.navigation.AppScreens
 import com.example.donpedro.ui.theme.PrimaryRed
 import com.example.donpedro.ui.theme.SecondarySalmon
 import com.example.donpedro.ui.theme.TertiaryCream
@@ -30,7 +31,7 @@ fun HomeScreen(navController: NavController) {
 
     Scaffold(
         containerColor = Color.Transparent,
-        bottomBar = { BottomBar() }
+        bottomBar = { BottomBar(navController) }
     ) { padding ->
         Box(
             modifier = Modifier
@@ -70,13 +71,13 @@ fun HeroCarousel() {
 }
 
 @Composable
-fun BottomBar() {
+fun BottomBar(navController: NavController) {
     NavigationBar(containerColor = Color.White) {
         NavigationBarItem(
             icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
             label = { Text("Home") },
             selected = true,
-            onClick = { }
+            onClick = {}
         )
         NavigationBarItem(
             icon = { Icon(Icons.Default.Search, contentDescription = "Search") },
@@ -88,7 +89,7 @@ fun BottomBar() {
             icon = { Icon(Icons.Default.Person, contentDescription = "Profile") },
             label = { Text("Profile") },
             selected = false,
-            onClick = { }
+            onClick = {navController.navigate(route = AppScreens.ProfileScreen.route) }
         )
     }
 }

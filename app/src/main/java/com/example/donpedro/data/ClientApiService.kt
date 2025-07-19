@@ -16,6 +16,16 @@ data class RegisterResponse(
     val tokens: Token
 )
 
+data class LoginRequest(
+    val email: String,
+    val password: String
+)
+
+data class LoginResponse(
+    val user: User,
+    val tokens: Token
+)
+
 data class User(
     val id: String,
     val name: String,
@@ -26,9 +36,17 @@ data class Token(
     val refreshToken: String
 )
 
-
+data class LogoutRequest(
+    val refreshToken: String
+)
 
 interface ClientApiService {
     @POST("auth/register")
     suspend fun registerClient(@Body request: RegisterRequest): RegisterResponse
+
+    @POST("auth/logout")
+    suspend fun logout(@Body request: LogoutRequest): Response<Unit>
+
+    @POST("auth/login")
+    suspend fun login(@Body request: LoginRequest): LoginResponse
 }

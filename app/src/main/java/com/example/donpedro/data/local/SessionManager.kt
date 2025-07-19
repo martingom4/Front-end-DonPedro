@@ -16,7 +16,9 @@ class SessionManager(private val context: Context) {
         // TODO : encriptar los tokens antes de guardarlos
         val ACCESS_TOKEN_KEY = stringPreferencesKey("access_token") // Clave de token de acceso
         val REFRESH_TOKEN_KEY = stringPreferencesKey("refresh_token") // Clave de token de refresco que es la mas larga
-
+        val USER_ID_KEY = stringPreferencesKey("user_id")
+        val USER_NAME_KEY = stringPreferencesKey("user_name")
+        val USER_EMAIL_KEY = stringPreferencesKey("user_email")
     }
 
     suspend fun saveTokens(accessToken: String, refreshToken: String) {
@@ -26,6 +28,21 @@ class SessionManager(private val context: Context) {
         }
     }
 
+    suspend fun saveUserData(id: String, name: String, email: String) {
+        context.dataStore.edit { preferences ->
+            preferences[USER_ID_KEY] = id
+            preferences[USER_NAME_KEY] = name
+            preferences[USER_EMAIL_KEY] = email
+        }
+    }
+
+
+    fun getUserId(): Flow<String?> = context.dataStore.data.map { it[USER_ID_KEY] }
+
+    fun getUserName(): Flow<String?> = context.dataStore.data.map { it[USER_NAME_KEY] }
+
+    fun getUserEmail(): Flow<String?> = context.dataStore.data.map { it[USER_EMAIL_KEY] }
+
     fun getAccessToken(): Flow<String?> = context.dataStore.data.map { it[ACCESS_TOKEN_KEY] }
 
     fun getRefreshToken(): Flow<String?> = context.dataStore.data.map { it[REFRESH_TOKEN_KEY] }
@@ -33,4 +50,5 @@ class SessionManager(private val context: Context) {
     suspend fun clearTokens() {
         context.dataStore.edit { it.clear() }
     }
+
 }

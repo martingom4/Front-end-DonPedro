@@ -28,10 +28,11 @@ import com.example.donpedro.ui.theme.TertiaryCream
 import com.example.donpedro.navigation.AppScreens
 
 import com.example.donpedro.iu.components.TopBarComponent
+import com.example.donpedro.viewmodel.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
     val bgGradient = Brush.verticalGradient(
         colors = listOf(TertiaryCream, Color.White),
         tileMode = TileMode.Clamp
@@ -51,7 +52,7 @@ fun LoginScreen(navController: NavController) {
                 )
             },
             content = { innerPadding ->
-                LoginBodyContent(navController, modifier = Modifier.padding(innerPadding))
+                LoginBodyContent(navController, loginViewModel, modifier = Modifier.padding(innerPadding))
             }
         )
     }
@@ -59,10 +60,20 @@ fun LoginScreen(navController: NavController) {
 
 
 @Composable
-fun LoginBodyContent(navController: NavController, modifier: Modifier = Modifier) {
+fun LoginBodyContent(navController: NavController, loginViewModel: LoginViewModel, modifier: Modifier = Modifier) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+
+    val loginResult by loginViewModel.loginResult.collectAsState()
+
+    LaunchedEffect(loginResult) {
+        if (loginResult?.startsWith("Login exitoso") == true) {
+            navController.navigate(AppScreens.HomeScreen.route) {
+                popUpTo(AppScreens.LoginScreen.route) { inclusive = true }
+            }
+        }
+    }
 
     val bgGradient = Brush.verticalGradient(
         colors = listOf(TertiaryCream, Color.White),
@@ -138,7 +149,9 @@ fun LoginBodyContent(navController: NavController, modifier: Modifier = Modifier
             val buttonShape = RoundedCornerShape(32.dp)
 
             Button(
-                onClick = { /* TODO handle login */ },
+                onClick = {
+                    loginViewModel.login(email, password)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
