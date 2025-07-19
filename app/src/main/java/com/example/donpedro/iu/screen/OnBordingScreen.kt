@@ -34,18 +34,26 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.foundation.background
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import com.example.donpedro.data.local.SessionManager
+import com.example.donpedro.viewmodel.SessionViewModel
 
 
 @Composable
 fun OnBoardingScreen(navController: NavController) {
-    // Soft cream → white gradient for depth
+    val context = LocalContext.current
+    val sessionViewModel = remember { SessionViewModel(SessionManager(context)) }
+    val isLoggedIn = sessionViewModel.isLoggedIn
+
+
     val bgGradient = Brush.verticalGradient(
         colors = listOf(TertiaryCream, Color.White),
         tileMode = TileMode.Clamp
     )
 
     Scaffold(
-        containerColor = Color.Transparent,     // leave transparent, Box will paint background
+        containerColor = Color.Transparent,
     ) { padding ->
         Box(
             modifier = Modifier
@@ -53,7 +61,9 @@ fun OnBoardingScreen(navController: NavController) {
                 .background(bgGradient)
                 .padding(padding)
         ) {
-            BodyContent(navController)
+            if(isLoggedIn == false ){
+                BodyContent(navController)
+            }
         }
     }
 }
@@ -122,3 +132,5 @@ fun BodyContent(navController: NavController) {
         }
     }
 }
+
+

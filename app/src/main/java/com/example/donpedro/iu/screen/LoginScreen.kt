@@ -27,6 +27,8 @@ import com.example.donpedro.ui.theme.SecondarySalmon
 import com.example.donpedro.ui.theme.TertiaryCream
 import com.example.donpedro.navigation.AppScreens
 
+import com.example.donpedro.iu.components.TopBarComponent
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -43,29 +45,18 @@ fun LoginScreen(navController: NavController) {
         Scaffold(
             containerColor = Color.Transparent,
             topBar = {
-                TopAppBar(
-                    title = { Text(text = "Login", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)) },
-                    navigationIcon = {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Arrow Back",
-                            modifier = Modifier.clickable {
-                                navController.navigate(route = AppScreens.OnboardingScreen.route)
-                            }
-                        )
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.Transparent,
-                        titleContentColor = PrimaryRed,
-                        navigationIconContentColor = PrimaryRed
-                    )
+                TopBarComponent(
+                    title = "Login",
+                    onBackClick = { navController.navigate(route = AppScreens.OnboardingScreen.route) }
                 )
+            },
+            content = { innerPadding ->
+                LoginBodyContent(navController, modifier = Modifier.padding(innerPadding))
             }
-        ) { innerPadding ->
-            LoginBodyContent(navController, modifier = Modifier.padding(innerPadding))
-        }
+        )
     }
 }
+
 
 @Composable
 fun LoginBodyContent(navController: NavController, modifier: Modifier = Modifier) {

@@ -3,6 +3,7 @@ package com.example.donpedro.data.remote
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import com.example.donpedro.data.ClientApiService
 
 object RetrofitInstance {
     val api: ClientApiService by lazy {

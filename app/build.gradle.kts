@@ -43,7 +43,7 @@ android {
 dependencies {
     val nav_version = "2.9.2"
     val retrofit_version = "2.9.0"
-
+    val version_dataStore = "1.1.7"
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -57,6 +57,8 @@ dependencies {
     // retrofit
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
+    // dataStore
+    implementation("androidx.datastore:datastore-preferences:$version_dataStore")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -4,26 +4,37 @@
 // RegisterViewModel.kt
 package com.example.donpedro.viewmodel
 
+
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.donpedro.data.ClientRepository
-import com.example.donpedro.data.remote.RegisterRequest
+
+import com.example.donpedro.data.RegisterRequest
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import com.example.donpedro.data.local.SessionManager
+import com.example.donpedro.repository.ClientRepository
 
-class RegisterViewModel(private val repository: ClientRepository) : ViewModel() {
+
+class RegisterViewModel(
+    private val repository: ClientRepository,
+    private val sessionManager: SessionManager
+) : ViewModel() {
     var registerResult by mutableStateOf<String?>(null)
         private set
 
-    fun register(email: String, password: String, name: String) {
+    fun register(name: String, email: String, password: String) {
         viewModelScope.launch {
-            val response = repository.registerClient(RegisterRequest(email, password, name))
-            registerResult = if (response.isSuccessful) {
-                response.body()?.message
-            } else {
-                "Registration failed"
+            try {
+                val response = repository.registerClient(
+                    RegisterRequest(name = name, email = email, password = password)
+                )
+                registerResult = "Registro completo Bienvenido ${response.user.name}"
+                sessionManager.saveTokens(response.tokens.accessToken, response.tokens.refreshToken)
+            } catch (e: Exception) {
+                registerResult = "Error: ${e.message}"
             }
         }
     }

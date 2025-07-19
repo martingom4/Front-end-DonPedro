@@ -39,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import com.example.donpedro.iu.components.TopBarComponent
 import com.example.donpedro.viewmodel.RegisterViewModel
 
 
@@ -56,24 +57,11 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel) {
             .background(bgGradient)
     ) {
         Scaffold(
-            containerColor = Color.Transparent, // hace transparente el fondo del Scaffold
+            containerColor = Color.Transparent,
             topBar = {
-                TopAppBar(
-                    title = { Text(text = "Home", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)) },
-                    navigationIcon = {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Arrow Back",
-                            modifier = Modifier.clickable {
-                                navController.navigate(route = AppScreens.OnboardingScreen.route)
-                            }
-                        )
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.Transparent,
-                        titleContentColor = PrimaryRed,
-                        navigationIconContentColor = PrimaryRed
-                    )
+                TopBarComponent(
+                    title = "Registro",
+                    onBackClick = { navController.navigate(route = AppScreens.OnboardingScreen.route) }
                 )
             }
         ) { innerPadding ->
@@ -206,13 +194,23 @@ fun SecondBodyContent(navController: NavController,viewModel: RegisterViewModel,
             ) {
                 Text("Registrate", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold))
             }
-            if (viewModel.registerResult != null) {
+            LaunchedEffect(viewModel.registerResult) {
+                viewModel.registerResult?.let {
+                    if (it.startsWith("Registro completo")) {
+                        navController.navigate(AppScreens.HomeScreen.route) {
+                            popUpTo(AppScreens.RegisterScreen.route) { inclusive = true }
+                        }
+                    }
+                }
+            }
+            if (viewModel.registerResult?.startsWith("Error") == true) {
                 Text(
                     text = viewModel.registerResult ?: "",
                     color = PrimaryRed,
                     modifier = Modifier.padding(top = 16.dp)
                 )
             }
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
