@@ -16,23 +16,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.BrushPainter
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.donpedro.data.local.SessionManager
 import com.example.donpedro.viewmodel.HomeViewModel
 import com.example.donpedro.data.local.Product
+import com.example.donpedro.data.local.PromotionDto
 import com.example.donpedro.navigation.AppScreens
+import com.example.donpedro.ui.theme.NeutralDark
 import com.example.donpedro.ui.theme.PrimaryRed
 import com.example.donpedro.ui.theme.SecondarySalmon
 import com.example.donpedro.ui.theme.TertiaryCream
@@ -47,6 +53,7 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
     val userName by sessionManager.getUserName().collectAsState(initial = null)
 
     val products by viewModel.products.collectAsState()
+    val promotions by viewModel.promotions.collectAsState()
     val bgGradient = Brush.verticalGradient(
         colors = listOf(TertiaryCream, Color.White)
     )
@@ -62,12 +69,12 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
                 .padding(padding)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
-                Text("Hi, $userName", color = PrimaryRed, fontSize = 24.sp)
-                Text("Get your favorite food here!", color = SecondarySalmon)
+                Text("Hola, $userName", color = PrimaryRed, fontSize = 24.sp)
+                Text("Get your favorite food here!", color = NeutralDark )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                HeroCarousel()
+                HeroCarousel(promotions)
                 Spacer(modifier = Modifier.height(24.dp))
                 ProductList(products)
             }
@@ -108,17 +115,17 @@ fun ProductList(products: List<Product>) {
                             product.name,
                             color = PrimaryRed,
                             fontWeight = FontWeight.SemiBold,
-                            fontSize = 15.sp
+                            fontSize = 18.sp
                         )
                         Text(
                             product.description,
-                            color = NeutralGrey,
-                            fontSize = 12.sp,
+                            color = NeutralDark,
+                            fontSize = 15.sp,
                             maxLines = 2
                         )
                         Spacer(Modifier.height(4.dp))
                         Text(
-                            product.price,
+                            text = "$${product.price} usd",
                             color = SecondarySalmon,
                             fontWeight = FontWeight.Bold
                         )
@@ -130,19 +137,55 @@ fun ProductList(products: List<Product>) {
 }
 
 @Composable
-fun HeroCarousel() {
-    val items = listOf("Promo 1", "Promo 2", "Promo 3")
+fun HeroCarousel(promotions: List<PromotionDto>) {
+    val promoPlaceholder = remember {
+        ColorPainter(PrimaryRed)               // rojo sólido mientras carga / error
+    }
     LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        items(items) { item ->
-            Box(
+        items(promotions) { promo ->
+            val heroUrl = promo.products.firstOrNull()?.imageUrl ?: ""
+            Card(
+                shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .width(250.dp)
                     .height(140.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(PrimaryRed),
-                contentAlignment = Alignment.Center
             ) {
-                Text(item, color = Color.White, fontSize = 18.sp)
+                Box {
+                    AsyncImage(
+                        model = heroUrl,
+                        contentDescription = promo.title,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize(),
+                        placeholder = promoPlaceholder,
+                        error       = promoPlaceholder
+                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(
+                                Brush.verticalGradient(
+                                    listOf(Color.Transparent, NeutralDark.copy(alpha = 0.7f))
+                                )
+                            )
+                            .padding(12.dp),
+                        verticalArrangement = Arrangement.Bottom
+                    ) {
+                        Text(
+                            promo.title,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
+                        )
+                        if (promo.discountPct > 0) {
+                            Text(
+                                "${promo.discountPct}% OFF",
+                                color = SecondarySalmon,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 14.sp
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -150,24 +193,49 @@ fun HeroCarousel() {
 
 @Composable
 fun BottomBar(navController: NavController) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
     NavigationBar(containerColor = Color.White) {
+
         NavigationBarItem(
             icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
             label = { Text("Home") },
-            selected = true,
-            onClick = {}
+            selected = currentRoute == AppScreens.HomeScreen.route,
+            onClick = {
+                if (currentRoute != AppScreens.HomeScreen.route) {
+                    navController.navigate(AppScreens.HomeScreen.route) {
+                        popUpTo(AppScreens.HomeScreen.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+            }
         )
+
         NavigationBarItem(
             icon = { Icon(Icons.Default.Search, contentDescription = "Search") },
             label = { Text("Search") },
-            selected = false,
-            onClick = { }
+            selected = currentRoute == AppScreens.SearchScreen.route,
+            onClick = {
+                if (currentRoute != AppScreens.SearchScreen.route) {
+                    navController.navigate(AppScreens.SearchScreen.route) {
+                        launchSingleTop = true
+                    }
+                }
+            }
         )
+
         NavigationBarItem(
             icon = { Icon(Icons.Default.Person, contentDescription = "Profile") },
             label = { Text("Profile") },
-            selected = false,
-            onClick = {navController.navigate(route = AppScreens.ProfileScreen.route) }
+            selected = currentRoute == AppScreens.ProfileScreen.route,
+            onClick = {
+                if (currentRoute != AppScreens.ProfileScreen.route) {
+                    navController.navigate(AppScreens.ProfileScreen.route) {
+                        launchSingleTop = true
+                    }
+                }
+            }
         )
     }
 }

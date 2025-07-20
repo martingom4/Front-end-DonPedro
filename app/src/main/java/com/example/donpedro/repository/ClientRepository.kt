@@ -11,6 +11,7 @@ import com.example.donpedro.data.LoginResponse
 import com.example.donpedro.data.UpdateUserDto
 import com.example.donpedro.data.UpdateUserResponse
 import com.example.donpedro.data.local.Product
+import com.example.donpedro.data.local.PromotionDto
 import kotlinx.coroutines.flow.firstOrNull
 import retrofit2.Response
 
@@ -80,5 +81,9 @@ class ClientRepository(
 
     suspend fun getProducts(): List<Product>{
         return api.getProducts()
+    }
+
+    suspend fun getPromotions(): List<PromotionDto> {
+        return api.getPromotions()
     }
 }

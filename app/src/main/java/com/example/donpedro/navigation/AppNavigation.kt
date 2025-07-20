@@ -18,6 +18,7 @@ import com.example.donpedro.iu.screen.LoginScreen
 import com.example.donpedro.iu.screen.OnBoardingScreen
 import com.example.donpedro.iu.screen.ProfileScreen
 import com.example.donpedro.iu.screen.RegisterScreen
+import com.example.donpedro.iu.screen.SearchProductsScreen
 import com.example.donpedro.repository.ClientRepository
 import com.example.donpedro.viewmodel.EditProfileViewModel
 import com.example.donpedro.viewmodel.EditProfileViewModelFactory
@@ -69,6 +70,9 @@ fun AppNavigation() {
         }
         composable(route = AppScreens.UpdateProfileScreen.route) {
             EditProfileScreen(navController, viewModelProfile)
+        }
+        composable(route = AppScreens.SearchScreen.route) {
+            SearchProductsScreen(navController, viewModelHome)
         }
     }
 }

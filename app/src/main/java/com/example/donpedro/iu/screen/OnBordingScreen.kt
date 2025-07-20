@@ -1,5 +1,8 @@
 package com.example.donpedro.iu.screen
 
+import androidx.compose.ui.res.painterResource
+import com.example.donpedro.R
+
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,8 +19,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -29,11 +30,13 @@ import com.example.donpedro.ui.theme.TertiaryCream
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.example.donpedro.data.local.SessionManager
@@ -78,26 +81,16 @@ fun BodyContent(navController: NavController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // App name
-        Text(
-            text = "DON PEDRO",
-            style = MaterialTheme.typography.headlineLarge.copy(
-                fontWeight = FontWeight.Bold,
-                color = PrimaryRed
-            ),
-            textAlign = TextAlign.Center
+        // Image
+        Image(
+            painter = painterResource(id = R.drawable.recurso_1),
+            contentDescription = "Ilustración de bienvenida",
+            modifier = Modifier
+                .fillMaxWidth(0.7f)
+                .aspectRatio(1f)
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
-
-        // Tagline
-        Text(
-            text = "Comida hecha con el alma",
-            style = MaterialTheme.typography.bodyLarge.copy(color = SecondarySalmon),
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
         // Primary action: Sign Up
         Button(

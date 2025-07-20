@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -65,12 +66,10 @@ fun ProfileScreen(navController: NavController) {
     ) {
         Scaffold(
             containerColor = Color.Transparent,
-            topBar = {
-                TopBarComponent(
-                    title = "Perfil",
-                    onBackClick = { navController.popBackStack() }
-                )
-            }
+
+            bottomBar = { BottomBar(navController) },
+
+
         ) { innerPadding ->
             Column(
                 modifier = Modifier
@@ -85,10 +84,9 @@ fun ProfileScreen(navController: NavController) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("$userName", fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, fontSize = 18.sp)
-                    Text("$userEmail", color = Color.Gray)
-
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("$userName", fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, fontSize = 20.sp)
+                    Text("$userEmail", color = Color.Gray, fontSize = 18.sp)
+                    Spacer(modifier = Modifier.height(2.dp))
 
                     TextButton(
                         onClick = { navController.navigate(AppScreens.UpdateProfileScreen.route) }

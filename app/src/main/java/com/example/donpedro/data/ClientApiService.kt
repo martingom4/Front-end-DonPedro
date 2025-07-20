@@ -10,6 +10,7 @@ import retrofit2.http.PATCH
 import com.example.donpedro.data.UpdateUserDto
 import com.example.donpedro.data.UpdateUserResponse
 import com.example.donpedro.data.local.Product
+import com.example.donpedro.data.local.PromotionDto
 import retrofit2.http.GET
 
 data class RegisterRequest(
@@ -62,4 +63,8 @@ interface ClientApiService {
 
     @GET("api/products")
     suspend fun getProducts(): List<Product>
+
+    @GET("api/promotions")
+    suspend fun getPromotions(): List<PromotionDto>
+    
 }
