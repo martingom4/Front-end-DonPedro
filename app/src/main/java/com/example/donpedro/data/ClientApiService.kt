@@ -4,6 +4,13 @@ package com.example.donpedro.data
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.Response
+import retrofit2.http.Part
+import retrofit2.http.PATCH
+
+import com.example.donpedro.data.UpdateUserDto
+import com.example.donpedro.data.UpdateUserResponse
+import com.example.donpedro.data.local.Product
+import retrofit2.http.GET
 
 data class RegisterRequest(
     val name: String,
@@ -49,4 +56,10 @@ interface ClientApiService {
 
     @POST("auth/login")
     suspend fun login(@Body request: LoginRequest): LoginResponse
+
+    @PATCH("api/users/update")
+    suspend fun updateUser(@Body request: UpdateUserDto): UpdateUserResponse
+
+    @GET("api/products")
+    suspend fun getProducts(): List<Product>
 }

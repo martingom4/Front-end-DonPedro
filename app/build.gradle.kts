@@ -46,6 +46,7 @@ dependencies {
     val version_dataStore = "1.1.7"
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation(libs.androidx.core.ktx)
+    implementation("io.coil-kt:coil-compose:2.5.0")
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))

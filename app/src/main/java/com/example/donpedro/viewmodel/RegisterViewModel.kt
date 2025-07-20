@@ -33,6 +33,12 @@ class RegisterViewModel(
                 )
                 registerResult = "Registro completo Bienvenido ${response.user.name}"
                 sessionManager.saveTokens(response.tokens.accessToken, response.tokens.refreshToken)
+                sessionManager.saveUserData(
+                    id = response.user.id,
+                    name = response.user.name,
+                    email = response.user.email
+                )
+
             } catch (e: Exception) {
                 registerResult = "Error: ${e.message}"
             }

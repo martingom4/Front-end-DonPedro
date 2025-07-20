@@ -8,6 +8,9 @@ import com.example.donpedro.data.RegisterRequest
 import com.example.donpedro.data.RegisterResponse
 import com.example.donpedro.data.LoginRequest
 import com.example.donpedro.data.LoginResponse
+import com.example.donpedro.data.UpdateUserDto
+import com.example.donpedro.data.UpdateUserResponse
+import com.example.donpedro.data.local.Product
 import kotlinx.coroutines.flow.firstOrNull
 import retrofit2.Response
 
@@ -50,5 +53,32 @@ class ClientRepository(
         } else {
             Response.error(400, okhttp3.ResponseBody.create(null, "No refresh token"))
         }
+    }
+
+    suspend fun updateUser(
+        userId: String,
+        name: String? = null,
+        email: String? = null
+    ): UpdateUserResponse {
+        val dto = UpdateUserDto(
+            userId = userId,
+            name = name,
+            email = email
+        )
+
+        val updated = api.updateUser(dto)
+
+        // Actualiza la caché local
+        sessionManager.saveUserData(
+            id = updated.id,
+            name = updated.name,
+            email = updated.email
+        )
+
+        return updated
+    }
+
+    suspend fun getProducts(): List<Product>{
+        return api.getProducts()
     }
 }
