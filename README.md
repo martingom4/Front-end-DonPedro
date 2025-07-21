@@ -15,15 +15,17 @@ Permite a los clientes registrarse, explorar el menú, añadir productos al carr
 
 ## 3. Pantallas principales
 
-| Módulo        | Pantalla            | Captura                                           |
-|---------------|---------------------|---------------------------------------------------|
-| Autenticación | Login               | ![Login](screenshots/03.InicioDeSesion.jpeg)      |
-| Autenticación | Registro            | ![Registro](screenshots/02.CreacionDeCuenta.jpeg) |
-| Home          | Catálogo            | ![Catálogo](screenshots/04.Home.jpeg)             |
-| Perfil        | Opciones del Perfil | ![Carrito](screenshots/07.Perfil.jpeg)            |
-| Editar Perfil | Edicion de Perfil   | ![Historial](screenshots/08.EditarPerfil.jpeg)    |
+ Login | Registro |
+|-------|----------|
+| ![Login](screenshots/03.InicioDeSesion.jpeg) | ![Registro](screenshots/02.CreacionDeCuenta.jpeg) |
 
-> **Nota:** Si aún no tienes todas las vistas implementadas, crea la estructura de carpetas `screenshots/` y agrega las imágenes cuando estén listas siguiendo la numeración mostrada.
+| Home | Búsqueda |
+|------|----------|
+| ![Catálogo](screenshots/04.Home.jpeg) | ![Búsqueda](screenshots/05.Busqueda.jpeg) |
+
+| Perfil | Editar Perfil |
+|--------|---------------|
+| ![Carrito](screenshots/07.Perfil.jpeg) | ![Historial](screenshots/08.EditarPerfil.jpeg) |
 
 ## 4. Tecnologías utilizadas
 
