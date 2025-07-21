@@ -39,7 +39,7 @@ fun EditProfileScreen(
         containerColor = Color.Transparent,
         topBar = {
             TopBarComponent(
-                title = "Login",
+                title = "Editar Perfil",
                 onBackClick = { navController.navigate(route = AppScreens.ProfileScreen.route) }
             )
         }
